@@ -1,0 +1,16 @@
+{
+    "name": "eugene/mydata",
+    "description": "Simple Aade MyDATA invoice inteface",
+    "autoload": {
+        "psr-4": {
+            "Eugene\\Mydata\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "eugene",
+            "email": "nokanoki@gmail.com"
+        }
+    ],
+    "require": {}
+}
