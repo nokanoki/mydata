@@ -1,5 +1,5 @@
 <?php 
-namespace AnonymoPapki;
+namespace AnonymoPapaki;
 
 class Invoice
 {
