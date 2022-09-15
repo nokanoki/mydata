@@ -1,9 +1,9 @@
 {
-    "name": "eugene/mydata",
-    "description": "Simple Aade MyDATA invoice inteface",
+    "name": "anonymopapaki/mydata",
+    "description": "simple aade myDATA interface",
     "autoload": {
         "psr-4": {
-            "Eugene\\Mydata\\": "src/"
+            "Anonymopapaki\\Mydata\\": "src/"
         }
     },
     "authors": [
