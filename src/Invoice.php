@@ -1,5 +1,5 @@
 <?php 
-namespace Eugene\App;
+namespace AnonymoPapki;
 
 class Invoice
 {
