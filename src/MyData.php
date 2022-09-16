@@ -55,7 +55,7 @@ class MyData
                 $invRow->addChild('lineNumber', $line);
                 $invRow->addChild('quantity', $row['quantity']);
                 $invRow->addChild('netValue', $row['netValue']);
-                $invRow->addChild('vatCategory', $row['vatCategory']);
+                $invRow->addChild('vatCategory', $row['vatCategory'] ?? '1');
                 $invRow->addChild('vatAmount', $row['vatAmount']);
 
                 $ict = $invRow->addChild('incomeClassification');
