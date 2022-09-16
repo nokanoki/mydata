@@ -16,6 +16,34 @@ class MyData
         $this->aadeKey = $aadeKey;
         $this->testServer = $testServer;
     }
+    public function cancelInvoice($mark)
+    {
+        $ch = curl_init();
+        if ($this->testServer)
+            curl_setopt($ch, CURLOPT_URL, "https://mydata-dev.azure-api.net/CancelInvoice?mark=$mark");
+        else
+            curl_setopt($ch, CURLOPT_URL, "https://mydatapi.aade.gr/myDATA//CancelInvoice?mark=$mark");
+
+
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "aade-user-id: $this->aadeId",
+            "Ocp-Apim-Subscription-Key: $this->aadeKey",
+            'Content-Type: application/xml'
+        ));
+        $responseStr = curl_exec($ch);
+        if ($responseStr === FALSE)
+            throw new Exception('Κατι δε πηγε καλα ' . curl_error($ch));
+        curl_close($ch);
+        $responseXml = simplexml_load_string($responseStr);
+        print_r($responseXml);
+        if(!strcmp($responseXml->response->statusCode,'Success'))
+        {
+            return (String)$responseXml->response->cancellationMark;
+        }
+        return 0;
+    }
 
 
     public function sendInvoices($invoices)

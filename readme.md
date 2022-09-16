@@ -12,8 +12,10 @@ require_once 'vendor/autoload.php';
 use Anonymopapaki\Mydata\MyData;
 
 
-$data = new MyData('<user>', '<api key>',[$testServer = true]);//false για production
-print_r($data->sendInvoices(array(
+$data = new MyData('user', 'apikey',[$testServer = true/*false για production*/]);
+
+
+$ret = $data->sendInvoices(array(
     [
         'issuerVat' => 'αφμ μου',
         'counterpartVat' => 'αφμ του',
@@ -27,18 +29,21 @@ print_r($data->sendInvoices(array(
         //μετρητα
         'paymentType' => '3',
         */
-        'series' => 'σειρα',
-        'aa' => 'α/α',
+        'series' => 'a',
+        'aa' => '1929',
         'rows' => array(
             [
                 'quantity' => '1',
                 'netValue' => '7.50',
                 'vatAmount' => '1.80',
-                //φπα 24% default
                 //'vatCategory' => '1',
             ]
         ),
     ],
-)));
+));
+
+print_r($ret);
+$cancelationMark = $data->cancelInvoice($ret['mark']);
+print($cancelationMark);
 
 ```
