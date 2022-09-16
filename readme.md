@@ -12,7 +12,7 @@ require_once 'vendor/autoload.php';
 use Anonymopapaki\Mydata\MyData;
 
 
-$data = new MyData('<user>', '<api key>');
+$data = new MyData('<user>', '<api key>',[$testServer = true]);//false για production
 print_r($data->sendInvoices(array(
     [
         'issuerVat' => 'αφμ μου',
