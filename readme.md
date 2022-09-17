@@ -33,7 +33,6 @@ $ret = $data->sendInvoices(array(
         'aa' => '1929',
         'rows' => array(
             [
-                'quantity' => '1',
                 'netValue' => '7.50',
                 'vatAmount' => '1.80',
                 //'vatCategory' => '1',
