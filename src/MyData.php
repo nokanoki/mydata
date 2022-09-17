@@ -81,7 +81,8 @@ class MyData
             foreach ($inv['rows'] as $row) {
                 $invRow = $invNode->addChild('invoiceDetails');
                 $invRow->addChild('lineNumber', $line);
-                $invRow->addChild('quantity', $row['quantity']);
+                
+                //$invRow->addChild('quantity', $row['quantity']); DEN DOYLEYEI
                 $invRow->addChild('netValue', $row['netValue']);
                 $invRow->addChild('vatCategory', $row['vatCategory'] ?? '1');
                 $invRow->addChild('vatAmount', $row['vatAmount']);
@@ -92,8 +93,8 @@ class MyData
                 $ict->addChild('ic:amount', $row['netValue'], 'https://www.aade.gr/myDATA/incomeClassificaton/v1.0');
 
                 $line++;
-                $totalNetValue += ($row['netValue'] * $row['quantity']);
-                $totalVatValue += ($row['vatAmount'] * $row['quantity']);
+                $totalNetValue += ($row['netValue']); // * $row['quantity']);
+                $totalVatValue += ($row['vatAmount']);// * $row['quantity']);
             }
             //αυτο ηταν πιο πανω
             $payment->addChild('amount', $inv['paymentAmount'] ?? ($totalNetValue + $totalVatValue));
@@ -163,4 +164,38 @@ class MyData
             print('κατι δε πηγε καλα ' . $e->getMessage());
         }
     }
+    //test real server worked
+    public function requestMyIncomes()
+    {
+        $dateFrom = '01/01/2022';
+        $dateTo = '17/09/2022';
+
+        $ch = curl_init();
+        if ($this->testServer)
+            curl_setopt($ch, CURLOPT_URL, "https://mydata-dev.azure-api.net/RequestMyIncome?dateFrom=$dateFrom&dateTo=$dateTo");
+        else
+            curl_setopt($ch, CURLOPT_URL, "https://mydatapi.aade.gr/myDATA/RequestMyIncome?dateFrom=$dateFrom&dateTo=$dateTo");
+
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "aade-user-id: $this->aadeId",
+            "Ocp-Apim-Subscription-Key: $this->aadeKey"
+        ));
+        $responseStr = curl_exec($ch);
+        if ($responseStr === FALSE)
+            throw new Exception('Κατι δε πηγε καλα ' . curl_error($ch));
+        curl_close($ch);
+        print($responseStr);
+        $responseXml = simplexml_load_string($responseStr);
+        print_r($responseXml);
+        if(!strcmp($responseXml->response->statusCode,'Success'))
+        {
+            return 0;
+        }
+        return 0;
+    }
+    
+
+
 }
