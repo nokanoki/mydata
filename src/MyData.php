@@ -3,6 +3,10 @@
 namespace Nokanoki;
 
 use Exception;
+use Nokanoki\Enums\ClassificationCategory;
+use Nokanoki\Enums\ClassificationType;
+use Nokanoki\Enums\Currency;
+use Nokanoki\Enums\InvoiceType;
 use SimpleXmlElement;
 
 class MyData
@@ -259,5 +263,24 @@ class MyData
             return 0;
         }
         return 0;
+    }
+    public function makeInvoice(
+        InvoiceType $type,
+        ClassificationType $classificationType,
+        ClassificationCategory $classificationCategory,
+        Currency $currency,
+        string $series,
+        int $aa,
+        int $issueDate
+    ): Invoice {
+        return new Invoice(
+            $type,
+            $classificationType,
+            $classificationCategory,
+            $currency,
+            $series,
+            $aa,
+            $issueDate
+        );
     }
 }
