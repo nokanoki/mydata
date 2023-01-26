@@ -47,8 +47,8 @@ $invoice = $data->makeInvoice(
 );
 
 
-$invoice->setIssuer('139209465');
-//$invoice->setCounterparty('801255659');
+$invoice->setIssuer('afnmou');
+//$invoice->setCounterparty('afmtou');
 $invoice->addRow(7.5, VatCategory::FPA_24);
 $invoice->generatePayment();
 //or 
