@@ -18,6 +18,7 @@ class MyData
     }
     public function cancelInvoice($mark)
     {
+        throw new Exception("Not impl");
         $ch = curl_init();
         if ($this->testServer)
             curl_setopt($ch, CURLOPT_URL, "https://mydata-dev.azure-api.net/CancelInvoice?mark=$mark");
@@ -38,9 +39,8 @@ class MyData
         curl_close($ch);
         $responseXml = simplexml_load_string($responseStr);
         print_r($responseXml);
-        if(!strcmp($responseXml->response->statusCode,'Success'))
-        {
-            return (String)$responseXml->response->cancellationMark;
+        if (!strcmp($responseXml->response->statusCode, 'Success')) {
+            return (string)$responseXml->response->cancellationMark;
         }
         return 0;
     }
@@ -81,7 +81,7 @@ class MyData
             foreach ($inv['rows'] as $row) {
                 $invRow = $invNode->addChild('invoiceDetails');
                 $invRow->addChild('lineNumber', $line);
-                
+
                 //$invRow->addChild('quantity', $row['quantity']); DEN DOYLEYEI
                 $invRow->addChild('netValue', $row['netValue']);
                 $invRow->addChild('vatCategory', $row['vatCategory'] ?? '1');
@@ -94,7 +94,7 @@ class MyData
 
                 $line++;
                 $totalNetValue += ($row['netValue']); // * $row['quantity']);
-                $totalVatValue += ($row['vatAmount']);// * $row['quantity']);
+                $totalVatValue += ($row['vatAmount']); // * $row['quantity']);
             }
             //αυτο ηταν πιο πανω
             $payment->addChild('amount', $inv['paymentAmount'] ?? ($totalNetValue + $totalVatValue));
@@ -117,9 +117,11 @@ class MyData
         }
 
         $ch = curl_init();
-        if ($this->testServer)
-            curl_setopt($ch, CURLOPT_URL, 'https://mydata-dev.azure-api.net/SendInvoices');
-        else
+        if ($this->testServer) {
+            curl_setopt($ch, CURLOPT_URL, 'https://mydataapidev.aade.gr/SendInvoices');
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        } else
             curl_setopt($ch, CURLOPT_URL, 'https://mydatapi.aade.gr/myDATA/SendInvoices');
 
 
@@ -189,13 +191,9 @@ class MyData
         print($responseStr);
         $responseXml = simplexml_load_string($responseStr);
         print_r($responseXml);
-        if(!strcmp($responseXml->response->statusCode,'Success'))
-        {
+        if (!strcmp($responseXml->response->statusCode, 'Success')) {
             return 0;
         }
         return 0;
     }
-    
-
-
 }
