@@ -47,6 +47,7 @@ class MyData
 
     public function SendInvoice(Invoice $invoice)
     {
+
         $ch = curl_init();
         if ($this->testServer) {
             curl_setopt($ch, CURLOPT_URL, 'https://mydataapidev.aade.gr/SendInvoices');
@@ -83,18 +84,23 @@ class MyData
             }
             //Success μεταβηβαση τιμολογιου
             else if (!strcmp($responseXml->response->statusCode, 'Success')) {
+                return SendInvoiceResult::fromSuccess(
+                    (string)$responseXml->response->invoiceUid,
+                    (string)$responseXml->response->invoiceMark
+                );
+                /*
                 return [
                     'uid' => (string)$responseXml->response->invoiceUid,
                     'mark' => (string)$responseXml->response->invoiceMark,
                     'authCode' => (string)$responseXml->response->authenticationCode
-                ];
+                ];*/
             }
             //το unknown
             else {
                 throw new Exception('Αγνωστο ' . $responseXml->asXml());
             }
         } catch (Exception $e) {
-            print('κατι δε πηγε καλα ' . $e->getMessage());
+            return SendInvoiceResult::fromError($e->getMessage());
         }
     }
 
