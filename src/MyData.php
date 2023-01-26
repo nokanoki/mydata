@@ -45,7 +45,60 @@ class MyData
         return 0;
     }
 
+    public function SendInvoice(Invoice $invoice)
+    {
+        $ch = curl_init();
+        if ($this->testServer) {
+            curl_setopt($ch, CURLOPT_URL, 'https://mydataapidev.aade.gr/SendInvoices');
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        } else
+            curl_setopt($ch, CURLOPT_URL, 'https://mydatapi.aade.gr/myDATA/SendInvoices');
 
+
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $invoice->toMydataXML());
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "aade-user-id: $this->aadeId",
+            "Ocp-Apim-Subscription-Key: $this->aadeKey",
+            'Content-Type: application/xml'
+        ));
+        $responseStr = curl_exec($ch);
+        if ($responseStr === FALSE)
+            throw new Exception('Κατι δε πηγε καλα ' . curl_error($ch));
+        curl_close($ch);
+
+        try {
+            $responseXml = simplexml_load_string($responseStr);
+            //errors
+            if (!strcmp($responseXml->response->statusCode, 'ValidationError')) {
+                if (!strcmp($responseXml->response->errors[0]->error->code, '228')) {
+                    //το 228 το στελνει σιγουρα οταν ξαναστελνουμε το ιδιο τιμολογιο
+                    throw new Exception('Το τιμολογιο εχει ξανασταλει');
+                } else {
+                    //βλεποντας και κανοντας
+                    throw new Exception('Κατι πηγε στραβα ' . $responseXml->asXml());
+                }
+            }
+            //Success μεταβηβαση τιμολογιου
+            else if (!strcmp($responseXml->response->statusCode, 'Success')) {
+                return [
+                    'uid' => (string)$responseXml->response->invoiceUid,
+                    'mark' => (string)$responseXml->response->invoiceMark,
+                    'authCode' => (string)$responseXml->response->authenticationCode
+                ];
+            }
+            //το unknown
+            else {
+                throw new Exception('Αγνωστο ' . $responseXml->asXml());
+            }
+        } catch (Exception $e) {
+            print('κατι δε πηγε καλα ' . $e->getMessage());
+        }
+    }
+
+    //todo remove
     public function sendInvoices($invoices)
     {
         if (count($invoices) != 1)
@@ -166,6 +219,11 @@ class MyData
             print('κατι δε πηγε καλα ' . $e->getMessage());
         }
     }
+
+
+
+
+
     //test real server worked
     public function requestMyIncomes()
     {
