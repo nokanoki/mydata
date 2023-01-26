@@ -1,6 +1,6 @@
 <?php
 
-namespace Anonymopapaki\Mydata;
+namespace Nokanoki;
 
 use Exception;
 use SimpleXmlElement;

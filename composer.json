@@ -1,9 +1,9 @@
 {
-    "name": "anonymopapaki/mydata",
+    "name": "nokanoki/mydata",
     "description": "simple aade myDATA interface",
     "autoload": {
         "psr-4": {
-            "Anonymopapaki\\Mydata\\": "src/"
+            "Nokanoki\\": "src/"
         }
     },
     "authors": [
