@@ -184,6 +184,10 @@ class Invoice
             $tmp->addChild('netValue', $number($row->netValue));
             $tmp->addChild('vatCategory', $row->vatCategory->value);
             $tmp->addChild('vatAmount', $number($row->vatValue));
+            if ($row->description) {
+                $tmp->addChild('lineComments', $row->description);
+            }
+
 
             $ict = $tmp->addChild('incomeClassification');
             $ict->addChild('ic:classificationType', $row->classification->type->value, 'https://www.aade.gr/myDATA/incomeClassificaton/v1.0');
