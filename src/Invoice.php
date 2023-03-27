@@ -22,6 +22,9 @@ class Invoice
     private InvoiceType $type;
     private Currency $currency;
 
+    //
+    public string $correlatedInvoices;
+
     public float $totalNetValue;
     public float $totalVatValue;
     public float $totalWithheldValue;
@@ -43,7 +46,8 @@ class Invoice
         Currency $currency,
         string $series,
         int $aa,
-        int $issueDate
+        int $issueDate,
+        string $correlatedInvoices = null
     ) {
         $this->type = $type;
         $this->classificationType = $classificationType;
@@ -52,6 +56,7 @@ class Invoice
         $this->series = $series;
         $this->aa = $aa;
         $this->issueDate = $issueDate;
+        $this->correlatedInvoices = $correlatedInvoices;
     }
    
     public function setIssuer($afm, $branch = '0', $country = 'GR')
@@ -160,6 +165,11 @@ class Invoice
         $header->addChild('issueDate', date('Y-m-d', $this->issueDate));
         $header->addChild('invoiceType', $this->type->value);
         $header->addChild('currency', $this->currency->value);
+        //an einai pistotiko sysxetizomeno tote prepei na exei to mark
+        if($this->type == InvoiceType::TIMOLOGIO_PISTOTIKO_SYS->value)
+        {
+            $header->addChild('correlatedInvoices',$this->correlatedInvoices);
+        }
 
         $payments = $invoice->addChild('paymentMethods');
         foreach ($this->payments as $payment) {

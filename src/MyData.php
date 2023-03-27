@@ -271,7 +271,8 @@ class MyData
         Currency $currency,
         string $series,
         int $aa,
-        int $issueDate
+        int $issueDate,
+        string $correlatedInvoices = null
     ): Invoice {
         return new Invoice(
             $type,
@@ -280,7 +281,8 @@ class MyData
             $currency,
             $series,
             $aa,
-            $issueDate
+            $issueDate,
+            $correlatedInvoices
         );
     }
 }
