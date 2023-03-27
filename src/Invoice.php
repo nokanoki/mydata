@@ -22,8 +22,8 @@ class Invoice
     private InvoiceType $type;
     private Currency $currency;
 
-    //
-    public string $correlatedInvoices;
+    //mono gia pistotiko
+    public ?string $correlatedInvoices;
 
     public float $totalNetValue;
     public float $totalVatValue;

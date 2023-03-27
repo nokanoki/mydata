@@ -11,7 +11,7 @@ class InvoiceRow
     public float $vatValue;
     public VatCategory $vatCategory;
     public IncomeClassification $classification;
-    public string $description;
+    public ?string $description;
 
     
 }
