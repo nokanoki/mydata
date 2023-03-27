@@ -5,6 +5,7 @@ namespace Nokanoki\Enums;
 enum ClassificationCategory: string
 {
     case CATEGORY_1_1 = 'category1_1';
+    case CATEGORY_1_3 = 'category1_3';
 }
 /*
 category1_1 Έσοδα από Πώληση Εμπορευμάτων (+) / (-)
