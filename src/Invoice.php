@@ -167,7 +167,7 @@ class Invoice
         $header->addChild('invoiceType', $this->type->value);
         $header->addChild('currency', $this->currency->value);
         //an einai pistotiko sysxetizomeno tote prepei na exei to mark
-        if ($this->type == InvoiceType::TIMOLOGIO_PISTOTIKO_SYS->value) {
+        if ($this->correlatedInvoices) {
             $header->addChild('correlatedInvoices', $this->correlatedInvoices);
         }
 
