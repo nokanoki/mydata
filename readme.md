@@ -1,6 +1,6 @@
 composer 
 ```
-composer require anonymopapaki/mydata
+composer require nokanoki/mydata
 ```
 
 Αποστολη τιμολογιου
@@ -9,40 +9,56 @@ composer require anonymopapaki/mydata
 <?php
 require_once 'vendor/autoload.php';
 
-use Anonymopapaki\Mydata\MyData;
+use Nokanoki\Enums\ClassificationCategory;
+use Nokanoki\Enums\ClassificationType;
+use Nokanoki\Enums\Currency;
+use Nokanoki\MyData;
+use Nokanoki\Enums\InvoiceType;
+use Nokanoki\Enums\VatCategory;
+use Nokanoki\InvoiceParty;
+
+$data = new MyData('user', 'token');
+$real = new MyData('user', 'token', false);
+
+//$real->requestMyIncomes();
 
 
-$data = new MyData('user', 'apikey',[$testServer = true/*false για production*/]);
+//echo InvoiceType::APODIKSI_LIANIKIS_POLISIS->value;
+/*
+$invoice = new Invoice(
+    InvoiceType::APODIKSI_LIANIKIS_POLISIS,
+    ClassificationType::E3_561_001,
+    ClassificationCategory::CATEGORY_1_1,
+    Currency::EUR,
+    'A',
+    1,
+    time()
+);
+*/
+//or
+$invoice = $data->makeInvoice(
+    InvoiceType::APODIKSI_LIANIKIS_POLISIS,
+    ClassificationType::E3_561_003,
+    ClassificationCategory::CATEGORY_1_1,
+    Currency::EUR,
+    'A',
+    1,
+    time()
+);
 
 
-$ret = $data->sendInvoices(array(
-    [
-        'issuerVat' => 'αφμ μου',
-        'counterpartVat' => 'αφμ του',
-        /* 
-        //τιμολογιο πωλησης defualt
-        'invoiceType' => '1.1',
-        //πωληση αγαθων
-        'classificationType' => 'E3_561_001',
-        //εσοδα απο εμπορευματα
-        'classificationCategory' => 'category1_1',
-        //μετρητα
-        'paymentType' => '3',
-        */
-        'series' => 'a',
-        'aa' => '1929',
-        'rows' => array(
-            [
-                'netValue' => '7.50',
-                'vatAmount' => '1.80',
-                //'vatCategory' => '1',
-            ]
-        ),
-    ],
-));
+$invoice->setIssuer('afnmou');
+//$invoice->setCounterparty('afmtou');
+$invoice->addRow(7.5, VatCategory::FPA_24);
+$invoice->generatePayment();
+//or 
+//$invoice->addPayment(new PaymentDetail(9.3, PaymentType::METRITA));
+$invoice->generateSummary();
 
-print_r($ret);
-$cancelationMark = $data->cancelInvoice($ret['mark']);
-print($cancelationMark);
+
+$ret = $data->SendInvoice($invoice);
+var_dump($ret);
+return;
+
 
 ```
