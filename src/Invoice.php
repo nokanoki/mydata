@@ -58,7 +58,7 @@ class Invoice
         $this->issueDate = $issueDate;
         $this->correlatedInvoices = $correlatedInvoices;
     }
-   
+
     public function setIssuer($afm, $branch = '0', $country = 'GR')
     {
         $this->issuer = new InvoiceParty($afm, $branch, $country);
@@ -80,12 +80,13 @@ class Invoice
     }
     private array $rows;
     private int $rowLineNumber = 1;
-    public function addRow(float $netValue, VatCategory $vatCategory, ClassificationType $classificationType = null, ClassificationCategory $classificationCategory = null)
+    public function addRow(float $netValue, VatCategory $vatCategory, string $description = null, ClassificationType $classificationType = null, ClassificationCategory $classificationCategory = null)
     {
         $row = new InvoiceRow;
         $row->lineNumber = $this->rowLineNumber;
         $row->netValue = $netValue;
         $row->vatCategory = $vatCategory;
+        $row->description = $description;
         $row->vatValue = VatCategory::calcVat($netValue, $vatCategory);
         $row->classification = new IncomeClassification(
             $row->netValue,
@@ -166,9 +167,8 @@ class Invoice
         $header->addChild('invoiceType', $this->type->value);
         $header->addChild('currency', $this->currency->value);
         //an einai pistotiko sysxetizomeno tote prepei na exei to mark
-        if($this->type == InvoiceType::TIMOLOGIO_PISTOTIKO_SYS->value)
-        {
-            $header->addChild('correlatedInvoices',$this->correlatedInvoices);
+        if ($this->type == InvoiceType::TIMOLOGIO_PISTOTIKO_SYS->value) {
+            $header->addChild('correlatedInvoices', $this->correlatedInvoices);
         }
 
         $payments = $invoice->addChild('paymentMethods');
@@ -208,6 +208,4 @@ class Invoice
 
         return $xml->asXML();
     }
-
- 
 }

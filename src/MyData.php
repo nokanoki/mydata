@@ -150,6 +150,11 @@ class MyData
                 $invRow->addChild('vatCategory', $row['vatCategory'] ?? '1');
                 $invRow->addChild('vatAmount', $row['vatAmount']);
 
+                //if has descriptions 
+                if ($row->description) {
+                    $invRow->addChild('lineComments', $row->description);
+                }
+
                 $ict = $invRow->addChild('incomeClassification');
                 $ict->addChild('ic:classificationType', $inv['classificationType'] ?? 'E3_561_001', 'https://www.aade.gr/myDATA/incomeClassificaton/v1.0');
                 $ict->addChild('ic:classificationCategory', $inv['classificationCategory'] ?? 'category1_1', 'https://www.aade.gr/myDATA/incomeClassificaton/v1.0');
