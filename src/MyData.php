@@ -150,6 +150,7 @@ class MyData
                 $invRow->addChild('vatCategory', $row['vatCategory'] ?? '1');
                 $invRow->addChild('vatAmount', $row['vatAmount']);
 
+
                 //if has descriptions 
                 if ($row->description) {
                     $invRow->addChild('lineComments', $row->description);

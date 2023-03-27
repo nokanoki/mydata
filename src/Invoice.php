@@ -187,6 +187,10 @@ class Invoice
             if ($row->description) {
                 $tmp->addChild('lineComments', $row->description);
             }
+            //an einai fpa 0 thelei ekseresi, 27 eiani 'alloi logoi'
+            if ($row->vatCategory == VatCategory::FPA_0) {
+                $tmp->addChild('vatExemptionCategory', 27);
+            }
 
 
             $ict = $tmp->addChild('incomeClassification');
