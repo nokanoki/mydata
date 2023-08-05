@@ -103,11 +103,11 @@ class Invoice
     {
         $value = 0;
         foreach ($this->rows as $row) {
-            $value += $row->netValue;
+            $value += floor($row->netValue * 100.0) / 100.0;
             $value += $row->vatValue;
         }
         $this->payments = array();
-        $this->addPayment(new PaymentDetail($value, $type));
+        $this->addPayment(new PaymentDetail(floor($value * 100.0) / 100.0, $type));
         return $this;
     }
 
