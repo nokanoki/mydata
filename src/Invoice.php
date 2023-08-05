@@ -116,8 +116,8 @@ class Invoice
         $this->totalNetValue = 0;
         $this->totalVatValue = 0;
         foreach ($this->rows as $row) {
-            $this->totalNetValue += $row->netValue;
-            $this->totalVatValue += $row->vatValue;
+            $this->totalNetValue += floor($row->netValue * 100.0) / 100.0;
+            $this->totalVatValue += floor($row->vatValue * 100.0) / 100.0;
         }
 
         $this->totalWithheldValue ??= 0;
