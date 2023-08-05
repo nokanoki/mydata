@@ -104,7 +104,7 @@ class Invoice
         $value = 0;
         foreach ($this->rows as $row) {
             $value += floor($row->netValue * 100.0) / 100.0;
-            $value += $row->vatValue;
+            $value += floor($row->vatValue * 100.0) / 100.0;
         }
         $this->payments = array();
         $this->addPayment(new PaymentDetail(floor($value * 100.0) / 100.0, $type));
@@ -125,12 +125,12 @@ class Invoice
         $this->totalStampDutyValue ??= 0;
         $this->totalOtherTaxesValue ??= 0;
         $this->totalDeductionValue ??= 0;
-        $this->totalGrossValue = $this->totalNetValue
+        $this->totalGrossValue = floor(($this->totalNetValue
             + $this->totalVatValue
             + $this->totalWithheldValue
             + $this->totalFeesValue
             + $this->totalStampDutyValue
-            + $this->totalDeductionValue;
+            + $this->totalDeductionValue) * 100.0) / 100.0;
 
         $this->incomeClassification = new IncomeClassification(
             $this->totalNetValue,
