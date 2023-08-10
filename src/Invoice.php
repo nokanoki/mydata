@@ -103,11 +103,11 @@ class Invoice
     {
         $value = 0;
         foreach ($this->rows as $row) {
-            $value += floor($row->netValue * 100.0) / 100.0;
-            $value += floor($row->vatValue * 100.0) / 100.0;
+            $value += round($row->netValue * 100.0) / 100.0;
+            $value += round($row->vatValue * 100.0) / 100.0;
         }
         $this->payments = array();
-        $this->addPayment(new PaymentDetail(floor($value * 100.0) / 100.0, $type));
+        $this->addPayment(new PaymentDetail(round($value * 100.0) / 100.0, $type));
         return $this;
     }
 
@@ -116,8 +116,8 @@ class Invoice
         $this->totalNetValue = 0;
         $this->totalVatValue = 0;
         foreach ($this->rows as $row) {
-            $this->totalNetValue += floor($row->netValue * 100.0) / 100.0;
-            $this->totalVatValue += floor($row->vatValue * 100.0) / 100.0;
+            $this->totalNetValue += round($row->netValue * 100.0) / 100.0;
+            $this->totalVatValue += round($row->vatValue * 100.0) / 100.0;
         }
 
         $this->totalWithheldValue ??= 0;
@@ -125,7 +125,7 @@ class Invoice
         $this->totalStampDutyValue ??= 0;
         $this->totalOtherTaxesValue ??= 0;
         $this->totalDeductionValue ??= 0;
-        $this->totalGrossValue = floor(($this->totalNetValue
+        $this->totalGrossValue = round(($this->totalNetValue
             + $this->totalVatValue
             + $this->totalWithheldValue
             + $this->totalFeesValue
