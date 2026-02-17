@@ -7,11 +7,13 @@ class SendInvoiceResult
     public string $uid;
     public string $mark;
     public string $error;
-    public static function fromSuccess(string $uid, string $mark)
+    public string $qrUrl;
+    public static function fromSuccess(string $uid, string $mark, string $qrUrl)
     {
         $res = new SendInvoiceResult;
         $res->uid = $uid;
         $res->mark = $mark;
+        $res->qrUrl = $qrUrl;
         return $res;
     }
     public static function fromError(string $error)

@@ -90,7 +90,8 @@ class MyData
             else if (!strcmp($responseXml->response->statusCode, 'Success')) {
                 return SendInvoiceResult::fromSuccess(
                     (string)$responseXml->response->invoiceUid,
-                    (string)$responseXml->response->invoiceMark
+                    (string)$responseXml->response->invoiceMark,
+                    (string)$responseXml->response->qrUrl
                 );
                 /*
                 return [
